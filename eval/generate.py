@@ -1,7 +1,6 @@
 import os
 import time
 import json
-import shutil
 import argparse
 
 from tqdm import tqdm
@@ -15,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 parser = argparse.ArgumentParser()
 parser.add_argument('--save-dir', default=os.path.join(BASE_DIR, 'result', time.strftime('%Y%m%d_%H%M%S')))
 parser.add_argument('--trials', default=10, type=int)
-parser.add_argument('--dataset-dir', default=os.path.join(BASE_DIR, 'data'), help=''''
+parser.add_argument('--dataset-dir', default=os.path.join(BASE_DIR, 'data'), help='''
 Directory containing the dataset files. The directory should in the following format:
     dataset_dir
     ├── CVE-xxxx-xxxxx
@@ -30,7 +29,6 @@ Directory containing the dataset files. The directory should in the following fo
     |   └── security.c
     ├── CVE-zzzz-zzzzz
     ...
-    └── macro.h
 ''')
 parser.add_argument('--model', type=str, default='glm-4-flash')
 parser.add_argument('--api_endpoint', type=str, default='https://open.bigmodel.cn/api/paas/v4')
@@ -97,14 +95,14 @@ with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
         
         print(code_prompt, function_name)
 
-        for trial in range(1, args.trials + 1):
+        for _ in range(args.trials):
             futures.append(executor.submit(
                 Query(args.api_endpoint, api_key, args.model),
                 code_prompt,
                 function_name,
             ))
 
-    for future, (cve, trial) in tqdm(zip(as_completed(futures), product(cves, range(1, args.trials + 1))), total=len(futures)):
+    for future, (cve, _) in tqdm(zip(as_completed(futures), product(cves, range(args.trials))), total=len(futures)):
         if future.exception() is not None:
             output['output'][cve].append({
                 "error": True,
