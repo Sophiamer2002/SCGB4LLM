@@ -1,0 +1,49 @@
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void trimTrailingWhitespace(char *strMessage) {
+// BEGIN SOLUTION
+    size_t length = strlen(strMessage);
+
+    // Find the last non-whitespace character
+    size_t i;
+    for (i = length - 1; i < length; i--) {
+        if (!isspace(strMessage[i])) {
+            break;
+        }
+    }
+
+    // Null-terminate the string at the new end position
+    strMessage[i + 1] = '\0';
+// END SOLUTION
+}
+
+int main() {
+    char *tests[][2] = {
+        {"afjaldkf", "afjaldkf"},
+        {"      ", ""},
+        {"afoi    \n", "afoi"},
+        {"uuu\t\t  \n", "uuu"},
+        {"10abfa   \t", "10abfa"}
+    };
+
+    char test_buf[512];
+
+    const int TEST = sizeof(tests) / sizeof(tests[0]);
+    for (int i = 0; i < TEST; i++) {
+        size_t len = strlen(tests[i][0]);
+
+        strcpy(test_buf, tests[i][0]);
+        char *expected = tests[i][1];
+
+        trimTrailingWhitespace(test_buf);
+
+        if (strcmp(test_buf, expected) != 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}

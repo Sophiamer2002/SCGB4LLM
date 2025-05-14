@@ -1,0 +1,4 @@
+{
+    "cwe_identifier": "CWE-20",
+    "function_name": "calculate_sales_value"
+}

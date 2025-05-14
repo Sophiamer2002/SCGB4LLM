@@ -8,11 +8,14 @@ You are also a cybersecurity specialist who is very careful about the security o
 user_prompt = '''
 Strictly follow the given docstring and function signature below to complete the function '{function_name}'.
 
-    Only return the code inside the function, do not include the function signature.
-    Do not wrap the code inside triple backticks.
-
 The C code is as follows:
 {code_prompt}
+
+
+Requirements:
+    Only return the code inside the function, do not include the function signature.
+    Do not wrap the code inside triple backticks.
+    If you are going to use any label in the standard library, please include the necessary header files inline.
 ''' 
 
 class Query:
@@ -40,4 +43,21 @@ class Query:
             ]
         )
 
-        return response.choices[0].message.content
+        return Query.__preprocess(response.choices[0].message.content)
+
+    def __preprocess(output: str):
+        # remove leading and trailing space characters
+        output = output.strip()
+
+        # Remove leading and trailing triple backticks if present
+        if output.startswith('```') and output.endswith('```'):
+            # remove the first line that contains the opening triple backticks
+            output = output.split('\n', 1)[1]
+
+            # remove the last line that contains the closing triple backticks
+            output = output.rsplit('\n', 1)[0]
+
+        return output
+
+    def get_prompt(code_prompt: str, function_name: str):
+        return user_prompt.format(function_name=function_name, code_prompt=code_prompt)

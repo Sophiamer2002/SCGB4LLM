@@ -1,0 +1,5 @@
+{
+    "cwe_identifier": "CWE-119",
+    "pattern_description": "the number used to index the array should be checked strictly in the bound",
+    "function_name": "main"
+}
