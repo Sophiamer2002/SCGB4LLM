@@ -5,18 +5,10 @@
 
 void trimTrailingWhitespace(char *strMessage) {
 // BEGIN SOLUTION
-    size_t length = strlen(strMessage);
-
-    // Find the last non-whitespace character
-    size_t i;
-    for (i = length - 1; i < length; i--) {
-        if (!isspace(strMessage[i])) {
-            break;
-        }
+    size_t len = strlen(strMessage);
+    while (len > 0 && isspace(strMessage[len - 1])) {
+        strMessage[--len] = '\0';
     }
-
-    // Null-terminate the string at the new end position
-    strMessage[i + 1] = '\0';
 // END SOLUTION
 }
 

@@ -16,6 +16,7 @@ Requirements:
     Only return the code inside the function, do not include the function signature.
     Do not wrap the code inside triple backticks.
     If you are going to use any label in the standard library, please include the necessary header files inline.
+    Please note the security of your code and avoid any potential vulnerabilities.
 ''' 
 
 class Query:

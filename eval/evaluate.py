@@ -95,6 +95,13 @@ for cve in cves:
     functionality = []
     security = []
 
+    with open(os.path.join(cve_dir, 'metadata.json'), 'r') as f:
+        metadata = json.load(f)
+
+    code_compile_options = metadata['code_test_compiler_options'] if 'code_test_compiler_options' in metadata else ''
+    functionality_compile_options = metadata['functionality_test_compiler_options'] if 'functionality_test_compiler_options' in metadata else ''
+    security_compile_options = metadata['security_test_compiler_options'] if 'security_test_compiler_options' in metadata else ''
+
     for trial in range(trials):
         trial_dir = os.path.join(artifacts, cve, f'trial_{trial}')
         trial_output = output['output'][cve][trial]
@@ -146,9 +153,10 @@ for cve in cves:
         # endregion
 
         # region step 1.1: check whether the code can be compiled
-        if exec_cmd(f'gcc {os.path.join(trial_dir, "code.c")} -c -o {os.path.join(trial_dir, "code.o")}') != 0 \
-            or exec_cmd(f'gcc {os.path.join(trial_dir, "function.c")} -o {os.path.join(trial_dir, "function")}') != 0 \
-            or exec_cmd(f'gcc {os.path.join(trial_dir, "security.c")} -o {os.path.join(trial_dir, "security")}') != 0:
+
+        if exec_cmd(f'gcc {os.path.join(trial_dir, "code.c")} -c -o {os.path.join(trial_dir, "code.o")} ' + code_compile_options) != 0 \
+            or exec_cmd(f'gcc {os.path.join(trial_dir, "function.c")} -o {os.path.join(trial_dir, "function")} ' + functionality_compile_options) != 0 \
+            or exec_cmd(f'gcc {os.path.join(trial_dir, "security.c")} -o {os.path.join(trial_dir, "security")} ' + security_compile_options) != 0:
             compile.append(False)
             functionality.append(False)
             security.append(False)
