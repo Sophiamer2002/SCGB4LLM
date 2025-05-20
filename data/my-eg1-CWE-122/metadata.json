@@ -1,0 +1,6 @@
+{
+    "cwe_identifier": "CWE-122",
+    "pattern_description": "Possible heap based buffer overflow (off by one error) during the second call of napi_get_value_string_ascii because the function call writes the null terminator",
+    "function_name": "retrieve_string_from_napi_value",
+    "security_test_compiler_options": "-fsanitize=address"
+}

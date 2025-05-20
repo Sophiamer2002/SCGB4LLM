@@ -1,0 +1,6 @@
+{
+    "cwe_identifier": "CWE-190",
+    "pattern_description": "buf_size - 1 may lead to integer underflow, causing buffer overwrite. Also there might be a null pointer dereference when dealing with variable `result`",
+    "function_name": "js_get_value_string_ascii",
+    "security_test_compiler_options": "-fsanitize=address"
+}
