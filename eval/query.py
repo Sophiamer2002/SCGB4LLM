@@ -37,7 +37,6 @@ class Query:
         response = self.client.chat.completions.create(
             model=self.model,
             temperature=0.6,
-            max_tokens=1024,
             messages=[
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt.format(function_name=function_name, code_prompt=code_prompt)},

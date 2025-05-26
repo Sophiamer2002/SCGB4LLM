@@ -2,6 +2,6 @@
     "source": "https://bugzilla.mozilla.org/show_bug.cgi?id=993546",
     "cwe_identifier": "CWE-416",
     "pattern_description": "realloc(p, newsize) returns a value to the pointer pnew. A non-NULL pnew indicates that a new chunk of memory has been successfully allocated. However, when pnew is NULL, it does not necessarily mean that the function has errors like insufficient memory assignment. Actually, it can also indicate that the memory is successfully freed when new_size=0.  The freed memory may be accessed later, resulting in UaF, when the special semantics of realloc(new_size=0) is ignored.",
-    "function_name": "js_get_value_string_ascii",
+    "function_name": "CountingRealloc",
     "security_test_compiler_options": "-fsanitize=address"
 }

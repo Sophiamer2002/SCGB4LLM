@@ -1,0 +1,7 @@
+{
+    "source": "doubly linked list",
+    "cwe_identifier": "CWE-476",
+    "pattern_description": "possibly null pointer dereference when node->prev and node->next, and use after free if free the node at the beginning",
+    "function_name": "delete_node",
+    "security_test_compiler_options": "-fsanitize=address"
+}

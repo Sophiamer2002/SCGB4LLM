@@ -1,0 +1,7 @@
+{
+    "source": "https://github.com/verilator/verilator/commit/f98782c061e1f1718677090e4adc1c7576377b68",
+    "cwe_identifier": "CWE-416",
+    "pattern_description": "immediate use after free",
+    "function_name": "flushContext",
+    "security_test_compiler_options": "-fsanitize=address"
+}
