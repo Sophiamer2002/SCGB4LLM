@@ -32,7 +32,7 @@ Directory containing the dataset files. The directory should in the following fo
 ''')
 parser.add_argument('--model', type=str, default='glm-4-flash')
 parser.add_argument('--api_endpoint', type=str, default='https://open.bigmodel.cn/api/paas/v4')
-parser.add_argument('--concurrency', type=int, default=2)
+parser.add_argument('--concurrency', type=int, default=1)
 
 args = parser.parse_args()
 api_key = os.getenv('API_KEY')
@@ -59,7 +59,7 @@ for cve_dir in os.listdir(args.dataset_dir):
         raise FileNotFoundError(f'{cve_dir_path} does not contain metadata.json')
     if not os.path.exists(os.path.join(cve_dir_path, 'security.c')):
         raise FileNotFoundError(f'{cve_dir_path} does not contain security.c')
-    
+
     cves.append(cve_dir)
 
 # endregion
@@ -92,8 +92,8 @@ with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
             code_prompt = code_prompt.split('// BEGIN SOLUTION')[0] + code_prompt.split('// END SOLUTION')[1]
         with open(os.path.join(args.dataset_dir, cve, 'metadata.json'), 'r') as f:
             function_name = json.load(f)['function_name']
-        
-        print(code_prompt, function_name)
+
+        print(Query.get_prompt(code_prompt, function_name))
 
         for _ in range(args.trials):
             futures.append(executor.submit(
