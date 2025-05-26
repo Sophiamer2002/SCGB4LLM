@@ -1,5 +1,6 @@
 {
     "source": "https://cwe.mitre.org/data/definitions/190.html",
+    "cwe": "CWE-190",
     "cwe_identifier": "CWE-190",
     "pattern_description": "Possible integer overflow during multiplication, leading to further out-of-bound read/write",
     "function_name": "allocate_images",

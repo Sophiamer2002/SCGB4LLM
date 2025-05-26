@@ -1,5 +1,6 @@
 {
-    "source": "doubly linked list",
+    "source": "textbook examples: doubly linked list",
+    "cwe": "CWE-825",
     "cwe_identifier": "CWE-476",
     "pattern_description": "possibly null pointer dereference when node->prev and node->next, and use after free if free the node at the beginning",
     "function_name": "delete_node",

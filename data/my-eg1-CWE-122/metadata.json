@@ -1,4 +1,6 @@
 {
+    "source": "manually created, a real example during intern at Huawei Co.",
+    "cwe": "CWE-119",
     "cwe_identifier": "CWE-122",
     "pattern_description": "Possible heap based buffer overflow (off by one error) during the second call of napi_get_value_string_ascii because the function call writes the null terminator",
     "function_name": "retrieve_string_from_napi_value",

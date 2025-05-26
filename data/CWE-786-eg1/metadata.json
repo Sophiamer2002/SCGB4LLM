@@ -1,5 +1,6 @@
 {
     "source": "https://cwe.mitre.org/data/definitions/786.html",
+    "cwe": "CWE-119",
     "cwe_identifier": "CWE-786",
     "pattern_description": "might cause a buffer underwrite if the input character string contains all whitespace",
     "function_name": "trimTrailingWhitespace"

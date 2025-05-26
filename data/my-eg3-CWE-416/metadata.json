@@ -1,5 +1,6 @@
 {
     "source": "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9060cb719e61b685ec0102574e10337fa5f445ea",
+    "cwe": "CWE-825",
     "cwe_identifier": "CWE-416",
     "pattern_description": "use after free (by sockfs_setattr) if sock->sk isn't set to NULL after released",
     "function_name": "release_sk"

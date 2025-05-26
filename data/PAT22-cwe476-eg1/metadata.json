@@ -1,4 +1,6 @@
 {
+    "source": "https://zenodo.org/records/5225651 path: experiments_dow/cwe-476/codeql-eg-MissingNullTest-a",
+    "cwe": "CWE-825",
     "cwe_identifier": "CWE-476",
     "pattern_description": "possibly null pointer dereference after malloc, if we don't check the result",
     "function_name": "new_vec_int"
