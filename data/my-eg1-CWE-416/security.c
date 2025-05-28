@@ -1,15 +1,83 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 static size_t sAmount = 0;
+
+struct malloc_area {
+    void *ptr;
+    size_t size;
+    bool using;
+} records[1000];
+
+void *__real_malloc(size_t);
+void *__real_free(void *);
+void *__real_realloc(void *p, size_t new_size);
+
+void *__wrap_malloc(size_t size);
+void __wrap_free(void *p);
+void *__wrap_realloc(void *p, size_t new_size);
+
+void *__wrap_malloc(size_t size) {
+    void *p = __real_malloc(size);
+    if (p) {
+        for (int i = 0; i < 1000; i++) {
+            if (!records[i].using) {
+                records[i].ptr = p;
+                records[i].size = size;
+                records[i].using = true;
+                break;
+            }
+        }
+    }
+    return p;
+}
+
+void __wrap_free(void *p) {
+    __real_free(p);
+    for (int i = 0; i < 1000; i++) {
+        if (records[i].using && records[i].ptr == p) {
+            records[i].using = false;
+            break;
+        }
+    }
+}
+
+void *__wrap_realloc(void *p, size_t new_size) {
+    void *pnew = __real_realloc(p, new_size);
+    if (pnew) {
+        for (int i = 0; i < 1000; i++) {
+            if (records[i].using && records[i].ptr == p) {
+                records[i].ptr = pnew; // Update the pointer
+                records[i].size = new_size; // Update the size
+                break;
+            }
+        }
+    } else if (new_size == 0) {
+        for (int i = 0; i < 1000; i++) {
+            if (records[i].using && records[i].ptr == p) {
+                records[i].using = false;
+                break;
+            }
+        }
+    }
+
+    return pnew;
+}
 
 size_t MallocSizeOf(void *p) {
     if (!p) {
         return 0;
     } else {
-        *(char *)p = 'A'; // To detect error if it is a dangling pointer
-        return 1;
+        for (int i = 0; i < 1000; i++) {
+            if (records[i].using && records[i].ptr == p) {
+                return records[i].size;
+            }
+        }
+
+        printf("Error: Pointer not found in records, probably a use-after-free error.\n");
+        exit(1); // If the pointer is not found, exit with an error
     }
 }
 
@@ -56,8 +124,8 @@ void* CountingRealloc(size_t new_size, void* p) {
 
 int main() {
     void *p = CountingAlloc(10);
-    if (sAmount != 1) {
-        printf("Error: sAmount should be 1 after allocation.\n");
+    if (sAmount != 10) {
+        printf("Error: sAmount should be 10 after allocation.\n");
         return 1;
     }
 
